@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h5>Rejestracja</h5>
+    </div>
+</div>
+<div class="text-center">
+    <div class = "container">
+        <form method="POST" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h2 style="padding-bottom: 3rem"  class="text-center">Utwórz nowe konto</h2>
+                    <div class="form-outline mb-4">
+                        <div>
+                        {{ form.username }}
+                        </div>
+                        <label class="col-form-label" >Nazwa użytkownika</label>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <div>
+                        {{ form.email }}
+                        </div>
+                        <label class="col-form-label" >E-mail</label>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <div>
+                        {{ form.password1 }}
+                        </div>
+                        <label class="col-form-label" >Hasło</label>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                       <div>
+                        {{ form.password2 }}
+                        </div>
+                        <label class="col-form-label" >Potwierdź hasło</label>
+                    </div>
+<div>
+                    {{ form.errors }}
+    </div>
+                    <div class="d-flex align-items-center justify-content-center pb-4">
+                        <input class="btn btn-primary" type="submit" value="Utwórz konto">
+                    </div>
+
+                </form>
+</div>
+</div>
+{% endblock content%}

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<link href='{%static "fullcalendar/main.css" %}' rel='stylesheet'/>
+    <script src='{%static "fullcalendar/main.js"%}'></script>
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h5>KALENDARZ</h5>
+        <p class="text">Tutaj znajdziesz wszystkie wydarzenia odbywające się w naszym ośrodku</p>
+        <button type="button" class="btn btn-dark">Zapisz się</button>
+        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addEvent">Dodaj wydarzenie</button>
+    </div>
+</div>
+<div class="modal fade" id="addEvent" role="dialog">
+    <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h4><span class="glyphicon glyphicon-lock"></span> Dodaj wydarzenie</h4>
+        </div>
+        <div class="modal-body">
+            <form role="form">
+                <div class="form-group">
+                    <label for="klasa">Wybierz rodzaj wydarzenia</label>
+                    <select class="form-control" id="klasa">
+                        <option>Trening skokowy</option>
+                        <option>Trening ujeżdżeniowy</option>
+                        <option>Wyjazd w teren</option>
+                        <option>Zawody ujeżdżeniowe</option>
+                        <option>Zawody w skokach</option>
+                        <option>Konsultacje</option>
+                        <option>Egzaminy na odznaki</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="event"> Nazwa wydarzenia: </label>
+                    <input type="text" class="form-control" id="event" placeholder="nazwa wydarzenia">
+                    <label for="name"> Osoba odpowiedzialna: </label>
+                    <input type="text" class="form-control" id="name" placeholder="Imię i nazwisko">
+                    <label for="datetime" class="col-2 col-form-label">Data i godzina</label>
+                    <div class="col-10">
+                        <input class="form-control" type="datetime-local" value="2011-08-19T13:45:00"
+                               id="datetime">
+                    </div>
+                    <label for="max_osob" class="col-2 col-form-label">Maksymalna liczba osób:</label>
+                    <div class="col-10">
+                        <input class="form-control" type="number" value="42" id="max_osob">
+                    </div>
+                    <label for="uwagi"> Uwagi: </label>
+                    <input type="text" class="form-control" id="uwagi" placeholder="Uwagi">
+                </div>
+                <button type="submit" class="btn btn-block">Dodaj wydarzenie
+                    <span class="glyphicon glyphicon-ok"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+                },
+                initialDate: '2022-02-11',
+                navLinks: true, // can click day/week names to navigate views
+                businessHours: false, // display business hours
+                editable: true,
+                selectable: true,
+
+                eventClick: function(arg) {
+            if (confirm('Czy chcesz usunąć to wydarzenie?')) {
+              arg.event.remove()
+            }
+          },
+          editable: true,
+          dayMaxEvents: true, // allow "more" link when too many events
+            events: [
+                {% for competition in competitions %}
+                {
+                    title: "{{ competition.title }}",
+                    start: '{{ competition.start_date|date:"Y-m-d" }}',
+                    end: '{{ competition.end_date|date:"Y-m-d" }}',
+
+                },
+                {% endfor %}
+
+            ]
+
+
+           });
+
+            calendar.render();
+        });
+    </script>
+<div id='calendar' class="bg-2"></div>
+
+{% endblock content%}

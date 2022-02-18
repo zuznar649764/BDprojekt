@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<link href='{%static "fullcalendar/main.css" %}' rel='stylesheet'/>
+    <script src='{%static "fullcalendar/main.js"%}'></script>
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h5>KALENDARZ</h5>
+        <p class="text">Tutaj znajdziesz wszystkie wydarzenia odbywające się w naszym ośrodku</p>
+{% if user.is_staff %}
+        <a  class="btn btn-dark" href="{% url 'addTraining' %}">Dodaj treningi</a>
+        <a  class="btn btn-dark" href="{% url 'addCompetition' %}">Dodaj zawody</a>
+        {% else %}
+        <a  class="btn btn-dark" href="{% url 'allEvents' %}">Zobacz listę wydarzeń </a>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+                },
+                initialDate: '2022-02-11',
+                navLinks: true, // can click day/week names to navigate views
+                businessHours: false, // display business hours
+                editable: true,
+                selectable: true,
+{% if user.is_staff %}
+                eventClick: function(arg) {
+            if (confirm('Czy chcesz usunąć to wydarzenie?')) {
+              arg.event.remove()
+            }
+          },
+          {% endif %}
+          editable: true,
+          dayMaxEvents: true, // allow "more" link when too many events
+           events:   [{
+
+           {% for competition in competitions%}
+           title: '{{ competition.title }}',
+           start: '{{ competition.start }}',
+           end: '{{competition.start}}',
+           {% endfor %}
+
+                        start: '2022-02-06',
+                        end: '2022-02-08',
+                        overlap: false,
+                        display: 'background',
+                        color: '#ff9f89'
+                    }]
+
+
+           });
+
+            calendar.render();
+        });
+    </script>
+<div id='calendar' class="bg-2"></div>
+
+{% endblock content%}

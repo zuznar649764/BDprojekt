@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<link href='{%static "fullcalendar/main.css" %}' rel='stylesheet'/>
+    <script src='{%static "fullcalendar/main.js"%}'></script>
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h5>Dodaj trening jeździecki</h5>
+        <p class="text">Uzupełnij formularz aby dodać trening do kalendarza</p>
+    </div>
+</div>
+<div class="bg-2">
+    <div class="text-center">
+    <div class = "container">
+    <form method='POST'>
+        {% csrf_token %}
+        {{ form.as_p }}
+         {%  for message in messages %}
+                        <p id="message">{{ message }}</p>
+                    {% endfor %}
+        <input type='submit' value='save'/>
+    </form>
+</div>
+        </div>
+    </div>
+
+
+{% endblock content%}

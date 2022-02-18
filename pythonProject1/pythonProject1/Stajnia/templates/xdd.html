@@ -1,0 +1,90 @@
+events: [
+                    {
+                        title: '{{DateTime}}',
+                        start: '2022-02-13',
+                        constraint: 'businessHours'
+                    },
+                    {
+                        title: 'Meeting',
+                        start: '2022-02-13T11:00:00',
+                        constraint: 'availableForMeeting', // defined below
+                        color: '#257e4a'
+                    },
+                    {
+                        title: 'Conference',
+                        start: '2022-02-18',
+                        end: '2022-02-20'
+                    },
+                    {
+                        title: 'Party',
+                        start: '2022-02-22T20:00:00'
+                    },
+
+                    // areas where "Meeting" must be dropped
+                    {
+                        groupId: 'availableForMeeting',
+                        start: '2022-02-11T10:00:00',
+                        end: '2022-02-11T16:00:00',
+                        display: 'background'
+                    },
+                    {
+                        groupId: 'availableForMeeting',
+                        start: '2022-02-13T10:00:00',
+                        end: '2022-02-13T16:00:00',
+                        display: 'background'
+                    },
+
+                    // red areas where no events can be dropped
+                    {
+                        start: '2022-02-24',
+                        end: '2022-02-28',
+                        overlap: false,
+                        display: 'background',
+                        color: '#ff9f89'
+                    },
+                    {
+                        start: '2022-02-06',
+                        end: '2022-02-08',
+                        overlap: false,
+                        display: 'background',
+                        color: '#ff9f89'
+                    }
+                ]
+
+def calendar(request):
+    event = Competition.objects.get(id = 1)
+
+    context = {
+        "name": event.name,
+        "timeStart": event.timeStart,
+        "timeEnd": event.timeEnd,
+        "dateStart": event.dateStart,
+        "dateEnd": event.dateEnd,
+        "DateTime" : event.DateTime,
+
+    }
+
+    return render(request, 'calendar.html', context)
+
+def calendar(request):
+
+    competitions = Competition.objects.all()
+    trainings = Training.objects.all()
+    competition_list = []
+    training_list = []
+
+    if request.GET:
+        competition_arr =[]
+        for competition in competitions:
+            competition_sub_arr = {}
+            competition_sub_arr['title'] = competition.title
+            start_date = datetime.datetime.strptime(str(competition.start_date.date()), "%Y-%m-%d").strftime("%Y-%m-%d")
+            end_date = datetime.datetime.strptime(str(competition.end_date.date()), "%Y-%m-%d").strftime("%Y-%m-%d")
+            competition_sub_arr['start'] = start_date
+            competition_sub_arr['end'] = end_date
+            competition_arr.append(competition_sub_arr)
+        return HttpResponse(json.dumps(competition_arr))
+
+
+    context = { "competitions": competition_list}
+    return render(request, 'calendar.html', context)

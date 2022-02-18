@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h5>Wszystkie wydarzenia</h5>
+        <a  class="btn btn-dark" href="{% url 'allTrainings' %}">Treningi </a>
+    </div>
+</div>
+{% for competition in competitions%}
+<div class="bg-2">
+    <div  style = "background-color: #B5B2B2; border-style: solid; border-color: white; border-width: 10px;" class="container">
+        <div class ="row">
+       <div class="col-sm-4">
+          <h7>nazwa wydarzenia:</h7>
+         </div>
+      <div class="col-sm-8">
+          <h7>data i godzina:</h7>
+         </div>
+        </div>
+         <div class ="row">
+       <div class="col-sm-5">
+          <h2>{{ competition.title }}</h2>
+         </div>
+      <div class="col-sm-5">
+          <h2>{{competition.start}}</h2>
+         </div>
+<!--             <div class="col-sm-2">-->
+<!--          <a  class="btn btn-dark" href="{% url 'allEvents' %}">Zapisz się </a>-->
+<!--         </div>-->
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+{% endblock content%}
